@@ -29,7 +29,7 @@
   ([a] a)
   ([a b] (u/== a b))
   ([a b & c]
-    (apply = (= a b) c)))
+   (apply = (= a b) c)))
 
 
 (defmacro for-query
@@ -87,9 +87,9 @@
 (defn log
   [prefix & args]
   (map
-    (fn [env]
-      (apply println prefix (map (partial u/walk env) args))
-      env)))
+   (fn [env]
+     (apply println prefix (map (partial u/walk env) args))
+     env)))
 
 (defmacro with-query-ctx
   "There are several bits of information (indicies and the like) that are
@@ -104,7 +104,7 @@
 
 
 (def ^{:doc "A goal that always fails."}
-    fail (filter (constantly false)))
+  fail (filter (constantly false)))
 
 
 (defmacro transform [data q f & args]
@@ -112,12 +112,12 @@
 
 (defn update
   ([?path]
-    (==
-      ?path u/xform-path))
+   (==
+    ?path u/xform-path))
   ([?path ?attr]
-    (and
-      (= ?path u/xform-path)
-      (= ?attr u/xform-attr))))
+   (and
+    (= ?path u/xform-path)
+    (= ?attr u/xform-attr))))
 
 (defmacro cache-in-context
   "Runs an expression and caches the result under k in the query context. Should use
@@ -137,3 +137,12 @@
   "Binds the cache entry under k to the specified lvar."
   [k lvar]
   (u/get-local-cache k lvar))
+
+(comment
+ (require '[com.tbaldridge.odin.contexts.data :as d])
+ (def data {:val 40
+            :sub {:val 3
+                  :sub {:val -1}}})
+ (set (for-query
+       (d/query data ?path :val ?val)
+       ?val)))
